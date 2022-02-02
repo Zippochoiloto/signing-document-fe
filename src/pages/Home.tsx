@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { BootstrapNormalButton, BootstrapPrimaryButton } from "../components/Button";
 import HeaderHomePage from "../components/HeaderHomePage";
 import Style from "./StylesPages.module.css"
@@ -9,17 +9,44 @@ import AssignedToMeCard from "../components/AssignedToMeCard";
 import RecentCard from "../components/RecentCard";
 import Footer from "../components/Footer";
 import {useNavigate} from "react-router-dom";
+import {getAllDocuments} from "../api/AxiosService";
+import {DocumentPayload} from "./interface";
 
 
 function Home() {
     const navigation = useNavigate()
+    const [doc, setDoc] = useState([])
+    useEffect( () => {
+        (async function () {
+            const res = await getAllDocuments()
+            if (res.status !== 200) {
+                navigation('../login')
+                return
+            }
+            setDoc(res.data)
+        })()
+    }, [])
     const navigateToCreateProject = () => {
         navigation('../create-project')
     }
     const cards = CardList.map((item: CardProp, i) => {
+        let count = 0
+        switch (item.Title) {
+            case 'ALL DOCUMENTS':
+                count = doc.length
+                break
+            case 'PENDING':
+                count = doc.filter((s: DocumentPayload) => s.Status === 'Pending').length
+                break
+            case 'COMPLETED':
+                count = doc.filter((s: DocumentPayload) => s.Status === 'completed').length
+                break
+            default:
+                count = 0
+        }
         return (
             <div style={{ display: 'flex', width: '23%' }} key={i}>
-                <Card Title={item.Title} Number={item.Number} Icon={item.Icon} BackgroundColor={item.BackgroundColor} />
+                <Card Title={item.Title} Number={count} Icon={item.Icon} BackgroundColor={item.BackgroundColor} />
             </div>
         )
     })
@@ -56,8 +83,8 @@ function Home() {
                     {cards}
                 </div>
                 <div style={{display: 'flex', width: '100%', justifyContent: 'space-between'}}>
-                    <AssignedToMeCard/>
-                    <RecentCard/>
+                    <AssignedToMeCard payload={doc}/>
+                    <RecentCard payload={doc}/>
                 </div>
             </div>
             <Footer />

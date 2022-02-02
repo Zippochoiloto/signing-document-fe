@@ -1,4 +1,5 @@
 import axios from "axios"
+import {DocumentPayload} from "../pages/interface";
 
 const BaseURL = 'http://localhost:3001'
 
@@ -22,4 +23,20 @@ export const uploadFile = async(form: FormData) => {
 
 const getToken = () => {
     return localStorage.getItem('access_token')
+}
+
+export const getAllDocuments = async () => {
+    const req = await axios.get(`${BaseURL}/signing-document`, {
+        headers: {
+            Authorization: `Bearer ${getToken()}`
+        }
+    })
+    return req
+}
+
+export const updateDocument = async (id: string, payload: DocumentPayload) => {
+    const req = await axios.post(`${BaseURL}/signing-document/${id}`, payload,  {headers: {
+        Authorization: `Bearer ${getToken()}`
+    }} )
+    return req
 }

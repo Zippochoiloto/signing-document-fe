@@ -3,6 +3,8 @@ import Style from "./StylesComponents.module.css"
 import {styled} from "@mui/material/styles";
 import {Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow} from "@mui/material";
 import {BootstrapPrimaryButton} from "./Button";
+import {DocumentPayload, DocumentPayloads} from "../pages/interface";
+import {updateDocument} from "../api/AxiosService";
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -29,20 +31,32 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
 }));
 
 function createData(
-    name: string,
+    name: string | undefined,
     lastModified: string,
-    status: string
+    Status: string | undefined,
+    id: string
 ) {
-    return {name, lastModified, status};
+    return {name, lastModified, Status, id};
 }
 
-const rows = [
-    createData('Document 1', 'just now','DRAFT'),
-    createData('Document 2', '1 hour ago','PENDING'),
-    createData('Document 3', '22 July 2020','COMPLETED'),
-];
+interface Rows {
+    name: string | undefined
+    id: string
+    Status: string | undefined
+    lastModified: string,
+}
 
-function RecentCard() {
+function RecentCard(prop: DocumentPayloads) {
+    const rows = [] as Rows[];
+    prop.payload.forEach(el => {
+        rows.push(createData(el.DocName, 'just now', el.Status, el._id))
+    })
+    const signDocument = async (id: string) => {
+        const payload  = {} as DocumentPayload
+        payload.Status = 'completed'
+        await updateDocument(id, payload)
+        window.location.reload()
+    }
     return (
         <div className={Style.RecentCardContainer}>
             <p style={{fontWeight: 'bold', fontSize: 32, marginLeft: 15}}>Recent</p>
@@ -68,10 +82,10 @@ function RecentCard() {
                                         {row.lastModified}
                                     </StyledTableCell>
                                     <StyledTableCell component="th" scope="row">
-                                        {row.status}
+                                        {row.Status}
                                     </StyledTableCell>
                                     <StyledTableCell component="th" scope="row">
-                                        <BootstrapPrimaryButton variant="contained" disableRipple>
+                                        <BootstrapPrimaryButton variant="contained" disableRipple onClick={() => signDocument(row.id)}>
                                             <span>
                                             Sign Document
                                             </span>

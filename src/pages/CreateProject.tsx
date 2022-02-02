@@ -27,10 +27,11 @@ function CreateProject() {
 
     const startUploadFile = async () => {
         let formData = new FormData()
-        formData.append('owner', 'hehe')
         formData.append("file", files[0], files[0].name)
         const req = await uploadFile(formData)
-        console.log(req)
+        if (req.status === 201) {
+            setOpen(true)
+        }
     }
     return (
         <div>
@@ -85,7 +86,7 @@ function CreateProject() {
             </div>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    This is a success message!
+                    Upload file success
                 </Alert>
             </Snackbar>
             <Footer/>

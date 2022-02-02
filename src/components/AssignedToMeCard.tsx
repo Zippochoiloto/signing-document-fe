@@ -2,6 +2,8 @@ import Style from "./StylesComponents.module.css"
 import {styled} from "@mui/material/styles";
 import {Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow} from "@mui/material";
 import {BootstrapPrimaryButton} from "./Button";
+import {DocumentPayload, DocumentPayloads} from "../pages/interface";
+import {updateDocument} from "../api/AxiosService";
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -28,21 +30,34 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
 }));
 
 function createData(
-    name: string,
-    calories: number,
+    name: string | undefined,
+    id: string
 ) {
-    return {name, calories};
+    return {name, id};
 }
 
-const rows = [
-    createData('Document 1', 159,),
-    createData('Document 2', 237),
-];
+interface Rows {
+    name: string | undefined
+    id: string
+}
 
-function AssignedToMeCard() {
+function AssignedToMeCard(prop: DocumentPayloads) {
+    const rows = [] as Rows[];
+    const currentEmail = localStorage.getItem('email')
+    prop.payload.forEach(el => {
+        if (el.Status === 'Pending' && el.Assigner === currentEmail) {
+            rows.push(createData(el.DocName, el._id))
+        }
+    })
+    const signDocument = async (id: string) => {
+        const payload  = {} as DocumentPayload
+        payload.Status = 'completed'
+        await updateDocument(id, payload)
+        window.location.reload()
+    }
     return (
         <div className={Style.AssignToMeContainer}>
-            <p style={{fontWeight: 'bold', fontSize: 32, marginLeft: 15}}>Assigned to Me (2)</p>
+            <p style={{fontWeight: 'bold', fontSize: 32, marginLeft: 15}}>Assigned to Me ({rows.length})</p>
             <p style={{fontSize: 17, marginLeft: 15}}>Document(s) that requires your attention</p>
             <div className={Style.TableContainer}>
                 <TableContainer component={Paper} style={{backgroundColor: '#F2f2f2'}}>
@@ -60,7 +75,9 @@ function AssignedToMeCard() {
                                         {row.name}
                                     </StyledTableCell>
                                     <StyledTableCell>
-                                        <BootstrapPrimaryButton variant="contained" disableRipple>
+                                        <BootstrapPrimaryButton variant="contained" disableRipple onClick={() => {
+                                            signDocument(row.id)
+                                        }}>
                                             <span>
                                             Sign Document
                                             </span>
