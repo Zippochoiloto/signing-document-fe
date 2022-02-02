@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import Frame from "../icon/Frame1.png"
 import Dot from "../icon/dot.png"
 import { Button, TextField } from "@mui/material";
-import axios from "axios";
+import { login } from "../api/AxiosService";
 
 function Login() {
     const navigate = useNavigate()
@@ -17,18 +17,16 @@ function Login() {
     const handleChanePass = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setPassword(event.target.value)
     }
-    const sendRequestLogin = async() => {
-        const req = await axios.post('http://localhost:3001/auth/login', {
-            username: email,
-            password,
-        })
+    const sendRequestLogin = async () => {
+        const req = await login(email, password)
         if (req.status === 201) {
             const accessToken = req.data.access_token
             localStorage.setItem('access_token', accessToken)
+            localStorage.setItem('email', email)
             navigate('/home')
             return
         }
-        
+
     }
     return (
         <div style={{ height: 'calc(100vh - 5em)' }}>
@@ -38,8 +36,8 @@ function Login() {
                     <div className={Style.frameContainer}>
                         <img src={Frame} alt="" style={{ height: '100%' }} />
                     </div>
-                    <p style={{ fontWeight: 700, fontSize: 32 }}>Login to your Dedoco Account</p>
-                    <p style={{ fontWeight: 400, fontSize: 20, marginBottom: '2em' }}>Please login to your account before signing this document</p>
+                    <p style={{ fontWeight: 700, fontSize: 32, textAlign: 'center' }}>Login to your Dedoco Account</p>
+                    <p style={{ fontWeight: 400, fontSize: 20, marginBottom: '2em', textAlign: 'center' }}>Please login to your account before signing this document</p>
                     <div>
                         <TextField
                             style={{ width: '25em', height: '5em' }}
@@ -71,15 +69,15 @@ function Login() {
                         onClick={sendRequestLogin}>
                         Login
                     </Button>
-                    <div style={{ marginBottom: '1em'}}>
+                    <div style={{ marginBottom: '1em' }}>
                         <span style={{ marginRight: '2px' }}>
                             Do not have an account?
                         </span>
                         <a href="/">Create one</a>
                     </div>
                     <div>
-                        <a style={{marginRight: '1em'}} href="/">Term & Conditions</a>
-                        <img style={{marginRight: '1em'}} src={Dot} alt=""/>
+                        <a style={{ marginRight: '1em' }} href="/">Term & Conditions</a>
+                        <img style={{ marginRight: '1em' }} src={Dot} alt="" />
                         <a href="/">Privacy Policy</a>
                     </div>
 

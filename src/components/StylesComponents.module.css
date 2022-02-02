@@ -11,3 +11,95 @@
     display: flex;
     align-items: center;
 }
+
+.headerHomePageContainer {
+    height: 5em;
+    background-color: #FBFBFB;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2em;
+}
+
+.cardContainer {
+    width: 100%;
+    height: 6em;
+    display: flex;
+    padding-left: 1em;
+    border-radius: 8px;
+}
+
+.AssignToMeContainer {
+    height: 35vh;
+    width: 30%;
+    background-color: #F2F2F2;
+    padding-top: 1em;
+    border-radius: 12px;
+}
+
+.AssignToMeContainer .TableContainer {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    background-color: #F2F2F2;
+}
+
+.AssignToMeContainer .FooterContainer {
+    background-color: #DCDEE0;
+    width: 100%;
+    height: 5vh;
+    color: #0D41BF;
+    font-weight: bold;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.RecentCardContainer {
+    height: 35vh;
+    width: 65%;
+    background-color: #F2F2F2;
+    padding-top: 1em;
+    border-radius: 12px;
+}
+
+.RecentCardContainer .TableContainer {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    background-color: #F2F2F2;
+}
+
+.RecentCardContainer .FooterContainer {
+    background-color: #DCDEE0;
+    width: 100%;
+    height: 5vh;
+    color: #0D41BF;
+    font-weight: bold;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.FootContainer {
+    border-top: 1px solid #DCDEE0;
+    display: flex;
+    height: 1.5em;
+    padding-left: 50%;
+}
+
+.FootContainer .Block{
+    height: 100%;
+    margin-top: 0.9em;;
+    padding-right: 2em;
+    border-right: 1px solid #828282;
+    padding-left: 1em;
+}
+
+.FootContainer .Block:last-child{
+    border: 0;
+}

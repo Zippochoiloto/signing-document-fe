@@ -9,6 +9,11 @@
   pointer-events: none;
 }
 
+p {
+  margin: 0px;
+  text-align: start;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
